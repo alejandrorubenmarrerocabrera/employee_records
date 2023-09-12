@@ -3,11 +3,11 @@ import pool from '@/app/database';
 export default async function handler(req, res) {
 	if (req.method === 'POST') {
 		try {
-			const { first_name, last_name, birthday } = req.body;
+			const { employee_id } = req.body;
 
-			const SQL = 'CALL InsertEmployee(?, ?, ?)';
+			const SQL = 'DELETE FROM employees WHERE employee_id = ?';
 
-			const [result] = await pool.query(SQL, [first_name, last_name, birthday]);
+			const [result] = await pool.query(SQL, [employee_id]);
 
 			res.status(201).json({ message: 'Employee created successfully', result });
 		} catch (error) {
