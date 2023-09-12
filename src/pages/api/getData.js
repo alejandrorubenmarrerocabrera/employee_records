@@ -2,7 +2,7 @@ import pool from "@/app/database";
 
 export default async function getData(req, res) {
     try {
-        const [rows, fields] = await pool.query("SELECT * FROM employees");
+        const [rows] = await pool.query("SELECT * FROM employees");
         res.status(200).json(rows);
     } catch (error) {
         console.log("Error fetching from MYSQL getData.js -> ", error);
