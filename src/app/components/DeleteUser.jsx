@@ -34,7 +34,6 @@ function ShowDeleteButton(id) {
 }
 
 export default function DeleteUser(userId) {
-	console.log(userId);
 	return (
 		<QueryClientProvider client={queryClient}>
 			<ShowDeleteButton userId={userId} />

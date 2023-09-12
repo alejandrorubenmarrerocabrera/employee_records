@@ -9,10 +9,10 @@ export default async function handler(req, res) {
 
 			const [result] = await pool.query(SQL, [employee_id]);
 
-			res.status(201).json({ message: 'Employee created successfully', result });
+			res.status(201).json({ message: 'Employee deleted successfully', result });
 		} catch (error) {
 			console.error('Error creating employee -> ', error);
-			res.status(500).json({ message: 'Employee creation failed' });
+			res.status(500).json({ message: 'Employee deletion failed' });
 		}
 	} else {
 		res.status(405).json({ message: 'Method not allowed' });

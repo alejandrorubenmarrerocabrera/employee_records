@@ -2,6 +2,7 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import DeleteUser from './DeleteUser';
+import UpdateUser from './UpdateUser';
 
 const queryClient = new QueryClient();
 
@@ -12,8 +13,6 @@ export default function ShowAllUsers() {
 		</QueryClientProvider>
 	);
 }
-
-function updateUser(userId) {}
 
 function FetchAllEmployees() {
 	const { isLoading, error, data } = useQuery(['repoData'], () => fetch('api/getData').then(res => res.json()));
@@ -43,12 +42,8 @@ function FetchAllEmployees() {
 						</div>
 						<div>Age: {employee.age}</div>
 						<div>Id: {employee.employee_id}</div>
-              <DeleteUser userId={employee.employee_id} />
-						<button
-							type="button"
-							className="text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 ">
-							Update user
-						</button>
+						<DeleteUser userId={employee.employee_id} />
+						<UpdateUser user={employee} />
 					</li>
 				))}
 			</ul>
