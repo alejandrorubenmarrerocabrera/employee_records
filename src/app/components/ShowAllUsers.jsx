@@ -1,30 +1,40 @@
 'use client';
 
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import React, { useEffect } from 'react';
+import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
 
-export default function ShowAllUsers() {
-	return (
-		<QueryClientProvider client={queryClient}>
-			<FetchAllEmployees />
-		</QueryClientProvider>
-	);
-}
-
 function deleteUser(id) {
-	fetch('/api/deleteUser', {
+	return fetch('/api/deleteUser', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({ employee_id: id })
-	}).then(res => (res.ok ? console.log('User deleted') : console.log('User not deleted')));
+	}).then(res => {
+		if (res.ok) {
+			console.log('User deleted');
+		} else {
+			console.log('User not deleted');
+		}
+	});
 }
 
 function FetchAllEmployees() {
-	let show = false;
-	const { isLoading, error, data } = useQuery(['repoData'], () => fetch('api/getData').then(res => res.json()));
+	const { isLoading, error, data, refetch } = useQuery(['repoData'], () =>
+		fetch('/api/getData').then(res => res.json())
+	);
+
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			refetch();
+		}, 1000);
+
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, [refetch]);
 
 	if (isLoading) {
 		return <div>Loading...</div>;
@@ -51,31 +61,22 @@ function FetchAllEmployees() {
 						</div>
 						<div>Age: {employee.age}</div>
 						<div>Id: {employee.employee_id}</div>
-						<button className="bg-red-500 rounded" onClick={deleteUser(employee.employee_id)}>
+						<button className="bg-red-500 rounded" onClick={() => deleteUser(employee.employee_id)}>
 							Delete user
 						</button>
-						<div>
-							<form action="api/updateUser" method="POST">
-								<div className="m-1">
-									<span>First name: </span>
-									<input type="text" name="first_name" className="text-black" />
-								</div>
-								<div className="m-1">
-									<span>Last name: </span>
-									<input type="text" name="last_name" className="text-black" />
-								</div>
-								<div className="m-1">
-									<span>Birthday: </span>
-									<input type="date" name="birthday" className="text-black" />
-								</div>
-								<input type="hidden" name="employee_id" value={employee.employee_id} />
-								{/* Add more form inputs as needed */}
-								<button type="submit">Update user</button>
-							</form>
-						</div>
 					</li>
 				))}
 			</ul>
 		</div>
 	);
 }
+
+function App() {
+	return (
+		<QueryClientProvider client={queryClient}>
+			<FetchAllEmployees />
+		</QueryClientProvider>
+	);
+}
+
+export default App;
