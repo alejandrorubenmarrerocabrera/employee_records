@@ -1,8 +1,7 @@
 'use client';
-import React from 'react';
+
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import DeleteUser from './DeleteUser';
-import UpdateUser from './UpdateUser';
 
 const queryClient = new QueryClient();
 
@@ -15,6 +14,7 @@ export default function ShowAllUsers() {
 }
 
 function FetchAllEmployees() {
+	let show = false;
 	const { isLoading, error, data } = useQuery(['repoData'], () => fetch('api/getData').then(res => res.json()));
 
 	if (isLoading) {
@@ -26,7 +26,7 @@ function FetchAllEmployees() {
 	return (
 		<div>
 			<h1 className="text-3xl m-2">Employees</h1>
-			<ul>
+			<ul className="grid grid-cols-3">
 				{data.map(employee => (
 					<li key={employee.employee_id}>
 						<div>
@@ -43,7 +43,25 @@ function FetchAllEmployees() {
 						<div>Age: {employee.age}</div>
 						<div>Id: {employee.employee_id}</div>
 						<DeleteUser userId={employee.employee_id} />
-						<UpdateUser user={employee} />
+						<div>
+							<form action="api/updateUser" method="POST">
+								<div className="m-1">
+									<span>First name: </span>
+									<input type="text" name="first_name" className="text-black" />
+								</div>
+								<div className="m-1">
+									<span>Last name: </span>
+									<input type="text" name="last_name" className="text-black" />
+								</div>
+								<div className="m-1">
+									<span>Birthday: </span>
+									<input type="date" name="birthday" className="text-black" />
+								</div>
+								<input type="hidden" name="employee_id" value={employee.employee_id} />
+								{/* Add more form inputs as needed */}
+								<button type="submit">Update user</button>
+							</form>
+						</div>
 					</li>
 				))}
 			</ul>
