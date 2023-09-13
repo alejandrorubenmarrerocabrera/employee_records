@@ -1,7 +1,6 @@
 'use client';
 
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import DeleteUser from './DeleteUser';
 
 const queryClient = new QueryClient();
 
@@ -11,6 +10,16 @@ export default function ShowAllUsers() {
 			<FetchAllEmployees />
 		</QueryClientProvider>
 	);
+}
+
+function deleteUser(id) {
+	fetch('/api/deleteUser', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ employee_id: id })
+	}).then(res => (res.ok ? console.log('User deleted') : console.log('User not deleted')));
 }
 
 function FetchAllEmployees() {
@@ -42,7 +51,9 @@ function FetchAllEmployees() {
 						</div>
 						<div>Age: {employee.age}</div>
 						<div>Id: {employee.employee_id}</div>
-						<DeleteUser userId={employee.employee_id} />
+						<button className="bg-red-500 rounded" onClick={deleteUser(employee.employee_id)}>
+							Delete user
+						</button>
 						<div>
 							<form action="api/updateUser" method="POST">
 								<div className="m-1">
