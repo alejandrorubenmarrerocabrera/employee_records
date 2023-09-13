@@ -1,18 +1,8 @@
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 
 const queryClient = new QueryClient();
 
 function ShowDeleteButton(id) {
-	const router = useRouter();
-	fetch('/api/deleteUser', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(id)
-	});
-
 	return (
 		<div>
 			<button
