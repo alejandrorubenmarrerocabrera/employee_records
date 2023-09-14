@@ -8,7 +8,18 @@ import UpdateUserForm from './UpdateUserForm';
 const queryClient = new QueryClient();
 
 async function deleteUser(id) {
-	// Your delete user logic
+	const res = await fetch('/api/deleteUser', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ employee_id: id })
+	});
+	if (res.ok) {
+		console.log('User deleted');
+	} else {
+		console.log('User not deleted');
+	}
 }
 
 function FetchAllEmployees() {
