@@ -28,44 +28,27 @@ CREATE PROCEDURE InsertEmployee(
     IN p_birthday DATE
 )
 BEGIN
-    DECLARE today DATE;
-    DECLARE birth_date DATE;
     DECLARE employee_age INT;
 
-    SET today = CURDATE();
-    SET birth_date = p_birthday;
-
-    SET employee_age = TIMESTAMPDIFF(YEAR, birth_date, today) -
-        (DATE_FORMAT(today, '%m%d') < DATE_FORMAT(birth_date, '%m%d'));
+    SET employee_age =
+        TIMESTAMPDIFF(YEAR, p_birthday, CURDATE());
 
     INSERT INTO employees (first_name, last_name, birthday, age)
     VALUES (p_first_name, p_last_name, p_birthday, employee_age);
 END //
 DELIMITER ;
 
+
 DELIMITER //
 CREATE PROCEDURE UpdateEmployeeAge(
     IN p_employee_id INT
 )
 BEGIN
-    DECLARE today DATE;
-    DECLARE birth_date DATE;
-    DECLARE employee_age INT;
-
-    -- Get the current date
-    SET today = CURDATE();
-
-    -- Get the birthdate for the employee
-    SELECT birthday INTO birth_date FROM employees WHERE employee_id = p_employee_id;
-
     -- Calculate the age accurately
-    SET employee_age = YEAR(today) - YEAR(birth_date) -
-        (DATE_FORMAT(today, '%m%d') < DATE_FORMAT(birth_date, '%m%d'));
-
-    -- Update the age for the employee
     UPDATE employees
-    SET age = employee_age
+    SET age = TIMESTAMPDIFF(YEAR, birthday, CURDATE())
     WHERE employee_id = p_employee_id;
 END //
 DELIMITER ;
+
 ```
