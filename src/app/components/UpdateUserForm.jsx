@@ -2,7 +2,11 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
+import { Button } from 'antd';
+import { Card } from 'antd';
+import { Input } from 'antd';
 
+const { Meta } = Card;
 const queryClient = new QueryClient();
 
 async function sendUserData(data) {
@@ -39,26 +43,28 @@ function ShowForm({ id }) {
 	};
 
 	return (
-		<div className="border rounded m-2 p-3">
-			<h1 className="text-3xl m-2">Update User Form</h1>
-			<form onSubmit={handleSubmit}>
-				<input
-					type="text"
-					value={id}
-					readOnly={true}
-					className="m-2  text-black"
-					name="employee_id"
-					placeholder="Id"
-				/>
-				<input type="text" className="m-2 text-black" name="first_name" placeholder="First Name" />
-				<input type="text" className="m-2 text-black" name="last_name" placeholder="Last Name" />
-				<input type="date" className="m-2 text-black" name="birthday" placeholder="Birthday" />
-				<button type="submit" className="m-2 p-1 rounded bg-white text-black" disabled={isLoading}>
-					{isLoading ? 'Updating User...' : 'Update user'}
-				</button>
-				{isError && <div className="text-red-500">User creation failed</div>}
-				{isSuccess && <div className="text-green-500">User update successfully</div>}
-			</form>
+		<div className="m-2 p-3">
+			<Card>
+				<Meta title="Update User form" description="" />
+				<form onSubmit={handleSubmit}>
+					<Input
+						type="text"
+						value={id}
+						readOnly={true}
+						className="m-2  text-black"
+						name="employee_id"
+						placeholder="Id"
+					/>
+					<Input type="text" className="m-2 text-black" name="first_name" placeholder="First Name" />
+					<Input type="text" className="m-2 text-black" name="last_name" placeholder="Last Name" />
+					<Input type="date" className="m-2 text-black" name="birthday" placeholder="Birthday" />
+					<button type="submit" className="m-2 bg-gray-500 rounded px-2 py-1" disabled={isLoading}>
+						{isLoading ? 'Updating User...' : 'Update user'}
+					</button>
+					{isError && <div className="text-red-500">User creation failed</div>}
+					{isSuccess && <div className="text-green-500">User update successfully</div>}
+				</form>
+			</Card>
 		</div>
 	);
 }

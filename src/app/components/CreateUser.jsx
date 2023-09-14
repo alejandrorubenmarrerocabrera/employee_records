@@ -2,7 +2,10 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
+import { Card } from 'antd';
+import { Input } from 'antd';
 
+const { Meta } = Card;
 const queryClient = new QueryClient();
 
 async function sendUserData(data) {
@@ -38,18 +41,20 @@ function UserForm() {
 	};
 
 	return (
-		<div className="border rounded m-2 p-3">
-			<h1 className="text-3xl m-2">Create User Form</h1>
-			<form onSubmit={handleSubmit}>
-				<input type="text" className="m-2 text-black" name="first_name" placeholder="First Name" />
-				<input type="text" className="m-2 text-black" name="last_name" placeholder="Last Name" />
-				<input type="date" className="m-2 text-black" name="birthday" placeholder="Birthday" />
-				<button type="submit" className="m-2 p-1 rounded bg-white text-black" disabled={isLoading}>
-					{isLoading ? 'Creating User...' : 'Create User'}
-				</button>
-				{isError && <div className="text-red-500">User update failed</div>}
-				{isSuccess && <div className="text-green-500">User update successfully</div>}
-			</form>
+		<div className="m-2 p-3">
+			<Card>
+				<Meta title="Create User form" description="" />
+				<form onSubmit={handleSubmit}>
+					<Input type="text" className="m-2 text-black" name="first_name" placeholder="First Name" />
+					<Input type="text" className="m-2 text-black" name="last_name" placeholder="Last Name" />
+					<Input type="date" className="m-2 text-black" name="birthday" placeholder="Birthday" />
+					<button type="submit" className="m-2 p-1 rounded bg-green-500 text-black" disabled={isLoading}>
+						{isLoading ? 'Creating User...' : 'Create User'}
+					</button>
+					{isError && <div className="text-red-500">User update failed</div>}
+					{isSuccess && <div className="text-green-500">User update successfully</div>}
+				</form>
+			</Card>
 		</div>
 	);
 }
