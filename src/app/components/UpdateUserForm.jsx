@@ -21,7 +21,7 @@ async function sendUserData(data) {
 	return response.json();
 }
 
-function ShowForm() {
+function ShowForm({id}) {
 	const { mutate, isLoading, isError, isSuccess } = useMutation(sendUserData);
 
 	const handleSubmit = async event => {
@@ -42,7 +42,7 @@ function ShowForm() {
 		<div className="border rounded m-2 p-3">
 			<h1 className="text-3xl m-2">Update User Form</h1>
 			<form onSubmit={handleSubmit}>
-				<input type="text" className="m-2 text-black" name="employee_id" placeholder="Id" />
+				<input type="text" value={id} readOnly={true} className="m-2  text-black" name="employee_id" placeholder="Id" />
 				<input type="text" className="m-2 text-black" name="first_name" placeholder="First Name" />
 				<input type="text" className="m-2 text-black" name="last_name" placeholder="Last Name" />
 				<input type="date" className="m-2 text-black" name="birthday" placeholder="Birthday" />
@@ -55,10 +55,11 @@ function ShowForm() {
 		</div>
 	);
 }
-export default function updateUserForm() {
+export default function updateUserForm({ id }) {
+	console.log('UpdateUserForm', id);
 	return (
 		<QueryClientProvider client={queryClient}>
-			<ShowForm />
+			<ShowForm id={id} />
 		</QueryClientProvider>
 	);
 }

@@ -1,30 +1,27 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider, useQuery, useMutation } from '@tanstack/react-query';
+import { Button } from 'antd';
+import UpdateUserForm from './UpdateUserForm';
 
 const queryClient = new QueryClient();
 
-function deleteUser(id) {
-	return fetch('/api/deleteUser', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ employee_id: id })
-	}).then(res => {
-		if (res.ok) {
-			console.log('User deleted');
-		} else {
-			console.log('User not deleted');
-		}
-	});
+async function deleteUser(id) {
+	// Your delete user logic
 }
 
 function FetchAllEmployees() {
 	const { isLoading, error, data, refetch } = useQuery(['repoData'], () =>
 		fetch('/api/getData').then(res => res.json())
 	);
+
+	const deleteUserMutation = useMutation(deleteUser, {
+		onSuccess: () => {
+			// When a user is deleted successfully, trigger a re-fetch of data
+			refetch();
+		}
+	});
 
 	useEffect(() => {
 		const intervalId = setInterval(() => {
@@ -35,6 +32,12 @@ function FetchAllEmployees() {
 			clearInterval(intervalId);
 		};
 	}, [refetch]);
+
+	const [selectedUserId, setSelectedUserId] = useState(null);
+
+	const handleUpdateUserClick = id => {
+		setSelectedUserId(id);
+	};
 
 	if (isLoading) {
 		return <div>Loading...</div>;
@@ -61,12 +64,16 @@ function FetchAllEmployees() {
 						</div>
 						<div>Age: {employee.age}</div>
 						<div>Id: {employee.employee_id}</div>
-						<button className="bg-red-500 rounded" onClick={() => deleteUser(employee.employee_id)}>
+						<button
+							className="bg-red-500 rounded"
+							onClick={() => deleteUserMutation.mutate(employee.employee_id)}>
 							Delete user
 						</button>
+						<button onClick={() => handleUpdateUserClick(employee.employee_id)}>Update User</button>
 					</li>
 				))}
 			</ul>
+			{selectedUserId && <UpdateUserForm id={selectedUserId} />}
 		</div>
 	);
 }
