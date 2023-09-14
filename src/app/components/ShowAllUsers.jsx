@@ -59,7 +59,7 @@ function FetchAllEmployees() {
 
 	return (
 		<div>
-			<h1 className="text-3xl text-center bg-white text-black font-bold rounded mx-10 m-2">Employees</h1>
+			<h1 className="text-3xl text-center bg-white text-black font-bold rounded mx-10 my-1 m-2">Employees</h1>
 			<div className="grid grid-cols-3">
 				{data.map(employee => (
 					<Card key={employee.employee_id} className="m-2">
