@@ -21,7 +21,7 @@ async function sendUserData(data) {
 	return response.json();
 }
 
-function ShowForm({id}) {
+function ShowForm({ id }) {
 	const { mutate, isLoading, isError, isSuccess } = useMutation(sendUserData);
 
 	const handleSubmit = async event => {
@@ -42,7 +42,14 @@ function ShowForm({id}) {
 		<div className="border rounded m-2 p-3">
 			<h1 className="text-3xl m-2">Update User Form</h1>
 			<form onSubmit={handleSubmit}>
-				<input type="text" value={id} readOnly={true} className="m-2  text-black" name="employee_id" placeholder="Id" />
+				<input
+					type="text"
+					value={id}
+					readOnly={true}
+					className="m-2  text-black"
+					name="employee_id"
+					placeholder="Id"
+				/>
 				<input type="text" className="m-2 text-black" name="first_name" placeholder="First Name" />
 				<input type="text" className="m-2 text-black" name="last_name" placeholder="Last Name" />
 				<input type="date" className="m-2 text-black" name="birthday" placeholder="Birthday" />
@@ -50,7 +57,7 @@ function ShowForm({id}) {
 					{isLoading ? 'Updating User...' : 'Update user'}
 				</button>
 				{isError && <div className="text-red-500">User creation failed</div>}
-				{isSuccess && <div className="text-green-500">User created successfully</div>}
+				{isSuccess && <div className="text-green-500">User update successfully</div>}
 			</form>
 		</div>
 	);
