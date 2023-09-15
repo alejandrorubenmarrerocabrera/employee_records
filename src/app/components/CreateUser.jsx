@@ -1,5 +1,5 @@
 'use client';
-
+import { useRef } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 import { Card } from 'antd';
@@ -25,6 +25,7 @@ async function sendUserData(data) {
 }
 
 function UserForm() {
+	const formRef = useRef(null); // Create a ref for the form element
 	const { mutate, isLoading, isError, isSuccess } = useMutation(sendUserData);
 
 	const handleSubmit = async event => {
@@ -36,15 +37,17 @@ function UserForm() {
 			last_name: formData.get('last_name'),
 			birthday: formData.get('birthday')
 		};
-
 		mutate(data);
+
+		// Reset the form on successful user creation
+		console.log(formRef.current);
 	};
 
 	return (
 		<div className="m-2 p-3">
 			<Card>
 				<Meta title="Create User form" description="" />
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={handleSubmit} ref={formRef}>
 					<Input type="text" className="m-2 text-black" name="first_name" placeholder="First Name" />
 					<Input type="text" className="m-2 text-black" name="last_name" placeholder="Last Name" />
 					<Input type="date" className="m-2 text-black" name="birthday" placeholder="Birthday" />

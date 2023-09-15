@@ -46,9 +46,15 @@ function FetchAllEmployees() {
 	}, [refetch]);
 
 	const [selectedUserId, setSelectedUserId] = useState(null);
+	const [selectedUserName, setSelectedUserName] = useState(null);
+	const [selectedUserLastName, setSelectedUserLastName] = useState(null);
+	const [selectedUserBirthday, setSelectedUserBirthday] = useState(null);
 
-	const handleUpdateUserClick = id => {
+	const handleUpdateUserClick = (id, name, lastName, birthday) => {
 		setSelectedUserId(id);
+		setSelectedUserName(name);
+		setSelectedUserLastName(lastName);
+		setSelectedUserBirthday(birthday);
 	};
 
 	if (isLoading) {
@@ -85,13 +91,28 @@ function FetchAllEmployees() {
 						<Button
 							type="secondary"
 							className="mx-1 bg-green-500 text-white"
-							onClick={() => handleUpdateUserClick(employee.employee_id)}>
+							onClick={() =>
+								employee &&
+								handleUpdateUserClick(
+									employee.employee_id,
+									employee.first_name,
+									employee.last_name,
+									employee.birthday
+								)
+							}>
 							Update User
 						</Button>
 					</Card>
 				))}
 			</div>
-			{selectedUserId && <UpdateUserForm id={selectedUserId} />}
+			{selectedUserId && (
+				<UpdateUserForm
+					id={selectedUserId}
+					name={selectedUserName}
+					last_name={selectedUserLastName}
+					birthday={selectedUserBirthday}
+				/>
+			)}
 		</div>
 	);
 }
